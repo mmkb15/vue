@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import AddButton from "@/components/button/AddButton.vue";
 import PageHead from "@/components/PageHead.vue";
-import { api } from "@/api.ts";
+import { api, baseUrl } from "@/api.ts";
+import { ref } from "vue";
+import { type Product } from "@/interfaces/Product";
 
+
+let products = ref<Product[]>([]);
+console.log(products);
 function getAllProducts(){
   api.get('products')
       .then((res: any) => {
-        console.log(res.data.products.data);
+        // console.log(res.data.products.data);
+        products.value = res.data.products.data;
+        console.log(products);
       })
       .catch((err: any) => {
         console.log(err.response.data);
@@ -32,29 +39,35 @@ getAllProducts();
             <thead>
               <tr>
                 <th>#</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Amount</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>QTY</th>
                 <th>Status</th>
-                <th>Date</th>
-                <th></th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1001</td>
+              <tr v-for="item in products" :key="item.id">
+                <td>{{item.id}}</td>
                 <td>
-                  <strong>Rahim Uddin</strong>
-                  <div class="muted small">rahim@example.com</div>
+                  <div class = "item-img">
+                    <img v-if="item.image" :src="`${baseUrl}${item.image}`" width='40' height="40" class="rounded" :alt="item.name" />
+                    <img v-else :src="`https://placehold.co/400`" width='40' height="40" class="rounded" :alt="item.name" />
+                  </div>
+                  <strong>{{item.name}}</strong>
                 </td>
-                <td>Polo Shirt</td>
-                <td>৳1,200</td>
+                <td>{{item.price}}</td>
                 <td>
-                  <span class="badge badge-subtle theme-success"
-                    >Completed</span
+                    {{item.quantity}}
+                </td>
+                <td>
+                  <span 
+                    class="badge badge-subtle" 
+                    :class="item.active ? 'theme-success' : 'theme-danger'"
                   >
+                  {{item.active ? "Active" : "Inactive"}}
+                  </span>
                 </td>
-                <td>2026-10-18</td>
                 <td>
                   <div
                     class="btn-group"
