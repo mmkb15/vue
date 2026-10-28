@@ -5,11 +5,11 @@ export interface Product {
     quantity: number;
     image?: File | null | string;
     image_path?: string;
-    category_id: number;
-    category: string;
+    category_id: number | string;
+    category: any;
     description?: string;
-    brand_id: number;
-    brand: string;
+    brand_id: number | string;
+    brand: any;
     reorder_level: number;
     active: boolean;
     created_at?: string;
@@ -21,9 +21,9 @@ export const defaultProduct: Product = {
     name: '',
     price: 0,
     quantity: 0,
-    category_id: 0,
+    category_id: '',
     category: '',
-    brand_id: 0,
+    brand_id: '',
     brand: '',
     description: '',
     reorder_level: 0,

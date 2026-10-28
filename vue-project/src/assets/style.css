@@ -94,3 +94,22 @@ body { min-height: 100dvh; }
 .form-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 .table-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
 .table td, .table th { white-space: nowrap; vertical-align: middle; }
+
+
+.product-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.item-img img {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    display: block !important;
+}
+
+.product-info strong {
+    display: block !important;
+}

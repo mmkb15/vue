@@ -2,24 +2,34 @@
 import AddButton from "@/components/button/AddButton.vue";
 import PageHead from "@/components/PageHead.vue";
 import { api, baseUrl } from "@/api.ts";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { type Product } from "@/interfaces/Product";
+import { RouterLink } from "vue-router";
 
 
-let products = ref<Product[]>([]);
-console.log(products);
-function getAllProducts(){
-  api.get('products')
+let products  = ref<Product[]>([]);
+let pageLinks     = ref<any[]>([]);
+// console.log(products);
+function getAllProducts(url: string){
+  api.get(url)
       .then((res: any) => {
-        // console.log(res.data.products.data);
-        products.value = res.data.products.data;
-        console.log(products);
+        // console.log(res.data.products);
+        products.value  = res.data.products.data;
+        pageLinks.value     = res.data.products.links;
+        console.log(pageLinks);
       })
       .catch((err: any) => {
         console.log(err.response.data);
       })
 }
-getAllProducts();
+// getAllProducts('products');
+onMounted(()=> {
+  getAllProducts('products');
+})
+
+// function handlePagination(pg: string){
+//   alert(pg);
+// }
 </script>
 
 <template>
@@ -30,10 +40,10 @@ getAllProducts();
   <section class="section-gap">
     <div class="card">
       <div class="card-body">
-        <div class="table-head">
+        <!-- <div class="table-head">
           <h5 class="card-title">Recent orders</h5>
           <span class="muted small">5 orders</span>
-        </div>
+        </div> -->
         <div class="table-responsive">
           <table class="table">
             <thead>
@@ -74,9 +84,9 @@ getAllProducts();
                     role="group"
                     aria-label="Accent theme example"
                   >
-                    <button type="button" class="btn-outline theme-secondary">
+                    <RouterLink :to="`/products/${item.id}`" class="btn-outline theme-secondary">
                       <i class="bi bi-eye"></i>
-                    </button>
+                    </RouterLink>
                     <button type="button" class="btn-outline theme-secondary">
                       <i class="bi bi-pencil"></i>
                     </button>
@@ -87,6 +97,24 @@ getAllProducts();
                 </td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                  <td colspan="3" class="fg-4">10 items out of 100</td>
+                  <td colspan="3">
+                      <nav aria-label="Page navigation example">
+                          <ul class="pagination theme-accent justify-content-end mb-0">
+
+                              <li v-for="link in pageLinks" class="page-item" :class="link.active ? 'active' : ''">
+                                <div class="page-link" role="button" :class="link.page == null ? 'disabled' : ''" @click="getAllProducts(link.url)">
+                                  <span v-html="link.label"></span>
+                                </div>
+                              </li>
+
+                          </ul>
+                      </nav>
+                  </td>
+              </tr>
+             </tfoot>
           </table>
         </div>
       </div>

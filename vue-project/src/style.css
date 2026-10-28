@@ -294,3 +294,21 @@ code {
     border-right-color: var(--border);
   }
 }
+
+.product-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.item-img img {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    display: block !important;
+}
+
+.product-info strong {
+    display: block !important;
+}
